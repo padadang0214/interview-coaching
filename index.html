@@ -1778,18 +1778,17 @@ async function submitAnswer() {
   "suggest": "더 나은 답변을 위한 구체적 제안 2-3문장"
 }`;
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const GOOGLE_API_KEY = 'AIzaSyAzJSjL7YYbAdb4cnJFR6sQiMhWuT8XxQ4';
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
+        contents: [{ parts: [{ text: prompt }] }]
       })
     });
 
     const data = await res.json();
-    const text = data.content[0].text.trim();
+    const text = data.candidates[0].content.parts[0].text.trim();
     const clean = text.replace(/```json|```/g, '').trim();
     const fb = JSON.parse(clean);
 
