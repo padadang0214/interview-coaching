@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>면접 코칭 서비스 | 창업특공대</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #1e2d45;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #475569;
+    --avocado: #86c04a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 900;
+  }
+  .logo-avo { font-size: 22px; }
+  .logo span { color: var(--accent); }
+
+  .header-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── LANDING ── */
+  #landing {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 40px;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-tag::before, .hero-tag::after {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent2);
+  }
+
+  .hero-title {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .hero-title .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text2);
+    text-align: center;
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .problems {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .prob-chip {
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .prob-chip span { color: var(--red); }
+
+  .start-btn {
+    position: relative;
+    padding: 18px 52px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: white;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    overflow: hidden;
+  }
+  .start-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .start-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(59,130,246,0.35); }
+  .start-btn:hover::after { opacity: 0.08; }
+  .start-btn:active { transform: translateY(0); }
+
+  .avo-decoration {
+    font-size: 80px;
+    position: absolute;
+    bottom: 60px;
+    right: 10%;
+    opacity: 0.5;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  /* ── SESSION SETUP ── */
+  #setup {
+    display: none;
+    min-height: 100vh;
+    padding: 100px 24px 60px;
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .setup-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .setup-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .setup-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; }
+
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .form-input, .form-select {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .form-select option { background: var(--surface2); }
+
+  .type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .type-card {
+    padding: 16px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .type-card:hover { border-color: var(--accent); }
+  .type-card.selected { border-color: var(--accent); background: rgba(59,130,246,0.1); }
+  .type-card .type-icon { font-size: 28px; margin-bottom: 6px; }
+  .type-card .type-name { font-size: 14px; font-weight: 600; }
+  .type-card .type-desc { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  .confirm-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    margin-top: 28px;
+    transition: all 0.2s;
+  }
+  .confirm-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* ── INTERVIEW ── */
+  #interview {
+    display: none;
+    min-height: 100vh;
+    padding: 80px 24px 60px;
+    position: relative;
+    z-index: 1;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .interview-container {
+    max-width: 720px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  /* Progress */
+  .progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .q-counter {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .q-counter strong { color: var(--accent); font-size: 20px; }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 100px;
+    margin: 0 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 100px;
+    transition: width 0.5s ease;
+  }
+
+  .score-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .score-display strong { color: var(--green); }
+
+  /* Question card */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .q-category {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .q-number {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  .q-text {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .q-tip {
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: rgba(59,130,246,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  /* Answer area */
+  .answer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .answer-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  textarea#answer-input {
+    width: 100%;
+    min-height: 140px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+    line-height: 1.7;
+  }
+  textarea#answer-input:focus { border-color: var(--accent); }
+  textarea#answer-input::placeholder { color: var(--text3); }
+
+  .answer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .char-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .submit-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Feedback */
+  .feedback-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+    display: none;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .feedback-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .score-badge {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .score-A { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid var(--green); }
+  .score-B { background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid var(--accent); }
+  .score-C { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid var(--yellow); }
+  .score-D { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid var(--red); }
+
+  .score-bars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .score-bar-item { }
+  .score-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .score-bar-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 1s ease;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .feedback-sections { display: grid; gap: 12px; }
+
+  .fb-section {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .fb-good { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); }
+  .fb-good .fb-icon { color: var(--green); }
+  .fb-improve { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); }
+  .fb-improve .fb-icon { color: var(--yellow); }
+  .fb-suggest { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); }
+  .fb-suggest .fb-icon { color: var(--accent2); }
+
+  .fb-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .next-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: all 0.2s;
+    display: none;
+  }
+  .next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* Loading */
+  .loading-overlay {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px;
+    text-align: center;
+  }
+  .spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { color: var(--text2); font-size: 14px; }
+
+  /* ── RESULT ── */
+  #result {
+    display: none;
+    min-height: 100vh;
+    padding: 100px 24px 60px;
+    position: relative;
+    z-index: 1;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .result-container {
+    max-width: 720px;
+    width: 100%;
+  }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .result-emoji { font-size: 60px; margin-bottom: 12px; }
+  .result-title { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+  .result-sub { font-size: 16px; color: var(--text2); }
+
+  .total-score-card {
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(6,182,212,0.1));
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 20px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .total-score-label { font-size: 13px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; font-family: 'Space Mono', monospace; }
+  .total-score-num {
+    font-size: 72px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    font-family: 'Space Mono', monospace;
+  }
+  .total-score-max { font-size: 24px; color: var(--text3); font-family: 'Space Mono', monospace; }
+  .total-grade { font-size: 20px; font-weight: 700; margin-top: 12px; }
+
+  .results-list { display: grid; gap: 12px; margin-bottom: 24px; }
+
+  .result-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .result-item:hover { border-color: var(--accent); }
+
+  .result-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text3);
+    min-width: 28px;
+    padding-top: 2px;
+  }
+  .result-content { flex: 1; }
+  .result-q { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .result-score-mini {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+  }
+
+  .strong-tag { color: var(--green); }
+  .weak-tag { color: var(--yellow); }
+
+  .restart-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .restart-btn:hover { border-color: var(--accent); }
+
+  /* User info tag */
+  .user-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 24px;
+  }
+
+  /* Step bar */
+  .step-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .step-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+  .step-dot.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .step-dot.done { background: var(--green); border-color: var(--green); color: white; }
+  .step-line {
+    flex: 1; height: 2px;
+    background: var(--border);
+    margin: 0 6px;
+    transition: background 0.3s;
+  }
+  .step-line.done { background: var(--green); }
+
+  /* Industry grid */
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .industry-card {
+    padding: 14px 10px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .industry-card:hover { border-color: var(--accent); }
+  .industry-card.selected { border-color: var(--accent); background: rgba(59,130,246,0.1); }
+  .industry-card .ind-icon { font-size: 22px; margin-bottom: 4px; }
+  .industry-card .ind-name { font-size: 13px; font-weight: 600; }
+  .industry-card .ind-rank { font-size: 10px; color: var(--text3); margin-top: 2px; font-family: 'Space Mono', monospace; }
+
+  /* Company chips */
+  .company-chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .company-chip {
+    padding: 7px 14px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .company-chip:hover { border-color: var(--accent); }
+  .company-chip.selected { border-color: var(--accent); background: rgba(59,130,246,0.12); color: var(--accent); font-weight: 600; }
+
+  /* Role chips */
+  .role-chip {
+    padding: 7px 14px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .role-chip:hover { border-color: var(--accent2); }
+  .role-chip.selected { border-color: var(--accent2); background: rgba(6,182,212,0.12); color: var(--accent2); font-weight: 600; }
+
+  /* Breadcrumb trail */
+  .breadcrumb {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 6px;
+  }
+  .bc-item {
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    background: rgba(59,130,246,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(59,130,246,0.25);
+  }
+
+
+    text-align: center;
+    font-size: 13px;
+    color: var(--text3);
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <span class="logo-avo">🥑</span>
+    <span>창업특공대 <span>면접코칭</span></span>
+  </div>
+  <div class="header-badge">AI Interview Coach</div>
+</header>
+
+<!-- ════════════════ LANDING ════════════════ -->
+<section id="landing" style="display:flex;">
+  <div class="hero-tag">취업 준비생을 위한 AI 면접 코칭</div>
+  <h1 class="hero-title">
+    취업 면접,<br>
+    <span class="highlight">AI와 함께</span> 준비하세요
+  </h1>
+  <p class="hero-sub">
+    대기업·중소기업·공기업·공무원 면접 질문 10개에 답변하면<br>
+    AI가 논리성·구체성·답변구조·전달력을 즉시 분석해드립니다.
+  </p>
+  <div class="problems">
+    <div class="prob-chip"><span>✕</span> 시간 낭비</div>
+    <div class="prob-chip"><span>✕</span> 높은 비용</div>
+    <div class="prob-chip"><span>✕</span> 거리 제약</div>
+    <div class="prob-chip"><span>✕</span> 강사 선택 제한</div>
+  </div>
+  <button class="start-btn" onclick="showSetup()">시작하기 →</button>
+  <div class="avo-decoration">🥑</div>
+</section>
+
+<!-- ════════════════ SETUP ════════════════ -->
+<section id="setup" style="display:none; flex-direction:column; align-items:center;">
+  <div class="setup-card" style="max-width:640px;">
+
+    <!-- Step indicator -->
+    <div class="step-bar">
+      <div class="step-dot active" id="dot-1">1</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2">2</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="dot-3">3</div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step-dot" id="dot-4">4</div>
+    </div>
+
+    <!-- STEP 1: 지원 유형 -->
+    <div id="step1">
+      <h2 class="setup-title">어떤 곳에 지원하시나요?</h2>
+      <p class="setup-sub">지원 유형에 따라 맞춤 질문이 달라집니다.</p>
+
+      <div class="type-grid">
+        <div class="type-card selected" onclick="selectType(this,'대기업')" data-type="대기업">
+          <div class="type-icon">🏢</div>
+          <div class="type-name">대기업</div>
+          <div class="type-desc">재계 1~50위 대기업</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'중소기업')" data-type="중소기업">
+          <div class="type-icon">🚀</div>
+          <div class="type-name">중소기업 · 스타트업</div>
+          <div class="type-desc">벤처 · 중견 · 스타트업</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'공기업')" data-type="공기업">
+          <div class="type-icon">🏛️</div>
+          <div class="type-name">공기업</div>
+          <div class="type-desc">한전 · 코레일 · NPS 등</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'공무원')" data-type="공무원">
+          <div class="type-icon">📋</div>
+          <div class="type-name">공무원</div>
+          <div class="type-desc">9급 · 7급 · 지방직</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'의료기관')" data-type="의료기관">
+          <div class="type-icon">🏥</div>
+          <div class="type-name">의료 · 보건기관</div>
+          <div class="type-desc">병원 · 보건소 · 요양원</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'사회복지')" data-type="사회복지">
+          <div class="type-icon">🤝</div>
+          <div class="type-name">사회복지 · NGO</div>
+          <div class="type-desc">복지관 · 재단 · 비영리</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'교육기관')" data-type="교육기관">
+          <div class="type-icon">🎓</div>
+          <div class="type-name">교육기관</div>
+          <div class="type-desc">학교 · 학원 · 에듀테크</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'보건의료직')" data-type="보건의료직">
+          <div class="type-icon">🩺</div>
+          <div class="type-name">보건의료 전문직</div>
+          <div class="type-desc">물리치료 · 언어재활 · 작업치료</div>
+        </div>
+        <div class="type-card" onclick="selectType(this,'서비스직')" data-type="서비스직">
+          <div class="type-icon">✂️</div>
+          <div class="type-name">서비스 · 뷰티직</div>
+          <div class="type-desc">미용 · 호텔 · 외식 · 항공</div>
+        </div>
+      </div>
+      <button class="confirm-btn" onclick="goStep2()">다음 →</button>
+    </div>
+
+    <!-- STEP 2: 산업군/분야/업종/시험종류 -->
+    <div id="step2" style="display:none;">
+      <h2 class="setup-title" id="step2-title">분야를 선택해 주세요</h2>
+      <p class="setup-sub" id="step2-sub"></p>
+      <div id="industry-grid" class="industry-grid"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button class="confirm-btn" style="background:var(--surface2);border:1px solid var(--border);color:var(--text2);flex:0 0 80px;" onclick="goStep1()">← 이전</button>
+        <button class="confirm-btn" style="flex:1;" onclick="goStep3()">다음 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 기업/기관/직렬 선택 -->
+    <div id="step3" style="display:none;">
+      <h2 class="setup-title" id="step3-title">기업·기관을 선택해 주세요</h2>
+      <p class="setup-sub">목록에서 선택하거나 직접 입력하세요.</p>
+      <div id="company-grid" class="company-chip-grid" style="margin-bottom:12px;"></div>
+      <div id="step3-direct-wrap">
+        <div class="form-group">
+          <label class="form-label">직접 입력</label>
+          <input class="form-input" type="text" id="company-direct-input" placeholder="">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button class="confirm-btn" style="background:var(--surface2);border:1px solid var(--border);color:var(--text2);flex:0 0 80px;" onclick="goStep2()">← 이전</button>
+        <button class="confirm-btn" style="flex:1;" onclick="goStep4()">다음 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 직무 + 이름 -->
+    <div id="step4" style="display:none;">
+      <h2 class="setup-title">지원 직무와 이름을 입력해 주세요</h2>
+      <p class="setup-sub" id="step4-company-display"></p>
+
+      <div class="form-group">
+        <label class="form-label">지원 직무 <span style="color:var(--red)">*</span></label>
+        <div id="role-chips" class="company-chip-grid" style="margin-bottom:10px;"></div>
+        <input class="form-input" type="text" id="role-input" placeholder="예: 해외영업, 마케팅, SW개발, 재무회계 등">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">이름 (선택)</label>
+        <input class="form-input" type="text" id="user-name" placeholder="예: 홍길동">
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button class="confirm-btn" style="background:var(--surface2);border:1px solid var(--border);color:var(--text2);flex:0 0 80px;" id="step4-back-btn" onclick="goStep3()">← 이전</button>
+        <button class="confirm-btn" style="flex:1;" onclick="startInterview()">면접 시작하기 🚀</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ INTERVIEW ════════════════ -->
+<section id="interview" style="display:none;">
+  <div class="interview-container">
+    <!-- Progress -->
+    <div class="progress-header">
+      <div class="q-counter">Q<strong id="q-num">1</strong></div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:10%"></div>
+      </div>
+      <div class="score-display">총점 <strong id="running-score">0</strong>점</div>
+    </div>
+
+    <!-- User tag -->
+    <div id="user-info-tag" class="user-tag">
+      <span>👤</span><span id="tag-text">취업 면접 준비생</span>
+    </div>
+
+    <!-- Question Card -->
+    <div class="question-card">
+      <div class="q-category" id="q-category">CATEGORY</div>
+      <div class="q-text" id="q-text">질문 로딩 중...</div>
+      <div class="q-tip" id="q-tip"></div>
+    </div>
+
+    <!-- Answer Card -->
+    <div class="answer-card" id="answer-section">
+      <div class="answer-label">📝 내 답변</div>
+      <textarea id="answer-input" placeholder="여기에 답변을 입력해 주세요. 실제 면접처럼 자연스럽게 말하듯 작성하세요.&#10;&#10;예시: &quot;저는 평소에 꼼꼼한 성격으로...&quot;"></textarea>
+      <div class="answer-meta">
+        <span class="char-count" id="char-count">0자</span>
+        <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">
+          <span>AI 피드백 받기</span>
+          <span>✨</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="feedback-card loading-overlay" id="loading-area" style="display:none;">
+      <div class="spinner"></div>
+      <p class="loading-text">AI가 답변을 분석하고 있습니다...</p>
+    </div>
+
+    <!-- Feedback Card -->
+    <div class="feedback-card" id="feedback-card">
+      <div class="feedback-header">
+        <div class="feedback-title">🤖 AI 피드백</div>
+        <div class="score-badge" id="grade-badge">A</div>
+      </div>
+
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>논리성</span><span id="bar-logic">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="fill-logic" style="width:0%"></div></div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>구체성</span><span id="bar-specific">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="fill-specific" style="width:0%"></div></div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>답변 구조</span><span id="bar-structure">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="fill-structure" style="width:0%"></div></div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>전달력</span><span id="bar-delivery">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="fill-delivery" style="width:0%"></div></div>
+        </div>
+        <div class="score-bar-item" style="grid-column: 1 / -1;">
+          <div class="score-bar-label"><span>⭐ 질문 관련성</span><span id="bar-relevance">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="fill-relevance" style="width:0%;background:linear-gradient(90deg,var(--yellow),var(--green));"></div></div>
+        </div>
+      </div>
+
+      <div class="feedback-sections" id="feedback-sections"></div>
+    </div>
+
+    <!-- Next button -->
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">다음 질문으로 →</button>
+    <div class="helper-tip" id="helper-tip"></div>
+  </div>
+</section>
+
+<!-- ════════════════ RESULT ════════════════ -->
+<section id="result" style="display:none;">
+  <div class="result-container">
+    <div class="result-header">
+      <div class="result-emoji" id="result-emoji">🎉</div>
+      <h2 class="result-title" id="result-title">면접 연습 완료!</h2>
+      <p class="result-sub" id="result-sub">총 10문항 답변 완료</p>
+    </div>
+
+    <div class="total-score-card">
+      <div class="total-score-label">종합 점수</div>
+      <div>
+        <span class="total-score-num" id="final-score">0</span>
+        <span class="total-score-max">/100</span>
+      </div>
+      <div class="total-grade" id="final-grade"></div>
+    </div>
+
+    <div class="results-list" id="results-list"></div>
+
+    <button class="restart-btn" onclick="restart()">🔄 다시 연습하기</button>
+  </div>
+</section>
+
+<script>
+// ══════════════════════════════════
+//  DATA
+// ══════════════════════════════════
+const QUESTION_BANKS = {
+  대기업: [
+    { cat: "자기소개", text: "1분 자기소개를 해주세요.", tip: "💡 이름 → 핵심 경험 → 지원 동기 → 포부 순으로 간결하게 구성하세요." },
+    { cat: "지원동기", text: "우리 회사에 지원한 이유와 입사 후 이루고 싶은 목표를 말씀해 주세요.", tip: "💡 회사의 사업 방향이나 최근 이슈를 언급하면 차별화됩니다." },
+    { cat: "강점/약점", text: "본인의 가장 큰 강점과 약점을 말씀해 주세요.", tip: "💡 약점은 반드시 극복 노력과 함께 말하세요." },
+    { cat: "직무역량", text: "지원 직무를 위해 어떤 준비를 해왔나요?", tip: "💡 인턴, 프로젝트, 자격증 등 구체적 활동을 언급하세요." },
+    { cat: "협업/갈등", text: "팀 프로젝트에서 갈등이 생겼을 때 어떻게 해결했나요?", tip: "💡 STAR 기법(상황-과제-행동-결과)을 활용하세요." },
+    { cat: "성과/도전", text: "지금까지 가장 힘들었던 경험과 극복 과정을 말씀해 주세요.", tip: "💡 어려움 → 내가 취한 행동 → 배운 점 순으로 말하세요." },
+    { cat: "리더십", text: "리더 역할을 맡았던 경험이 있나요? 어떻게 팀을 이끌었나요?", tip: "💡 리더 경험이 없다면 팀원으로서의 핵심 기여를 말해도 됩니다." },
+    { cat: "위기대처", text: "예상치 못한 문제가 발생했을 때 어떻게 대처했던 경험을 말씀해 주세요.", tip: "💡 즉각적인 판단력과 책임감을 보여주세요." },
+    { cat: "비전/성장", text: "5~10년 후 본인의 모습과 이 회사에서 어떤 기여를 하고 싶은지 말씀해 주세요.", tip: "💡 회사의 성장 방향과 나의 커리어를 연결하세요." },
+    { cat: "마지막 한마디", text: "마지막으로 하고 싶은 말씀이 있으신가요?", tip: "💡 30초 내로 핵심 어필 포인트와 입사 의지를 전달하세요." },
+  ],
+  중소기업: [
+    { cat: "자기소개", text: "간단히 자기소개를 해주세요.", tip: "💡 경력·역량 중심으로 간결하게, 지원 직무와 연결하세요." },
+    { cat: "지원동기", text: "많은 회사 중 우리 회사를 선택한 이유는 무엇인가요?", tip: "💡 회사 규모보다 성장 가능성, 문화, 비전에 집중하세요." },
+    { cat: "실무역량", text: "즉시 투입 가능한 본인의 핵심 역량은 무엇인가요?", tip: "💡 스타트업·중소기업은 바로 쓸 수 있는 실무 능력을 중시합니다." },
+    { cat: "멀티태스킹", text: "여러 업무를 동시에 처리해야 했던 경험이 있나요? 어떻게 관리했나요?", tip: "💡 우선순위 설정 능력과 자기관리 역량을 어필하세요." },
+    { cat: "자기주도", text: "스스로 문제를 발견하고 해결한 경험을 말씀해 주세요.", tip: "💡 지시를 기다리지 않고 능동적으로 행동한 사례를 말하세요." },
+    { cat: "적응력", text: "빠르게 변화하는 환경에 적응했던 경험을 말씀해 주세요.", tip: "💡 스타트업 환경의 불확실성에 유연하게 대처하는 모습을 보여주세요." },
+    { cat: "성과/기여", text: "지금까지 가장 뿌듯했던 성과와 본인의 기여를 말씀해 주세요.", tip: "💡 숫자나 결과로 표현할 수 있으면 더욱 좋습니다." },
+    { cat: "팀워크", text: "소수 인원의 팀에서 협업했던 경험을 말씀해 주세요.", tip: "💡 역할 분담, 소통 방식, 결과까지 구체적으로 말하세요." },
+    { cat: "성장/학습", text: "최근 스스로 공부하거나 역량을 키운 경험이 있나요?", tip: "💡 자기계발 의지와 학습 능력을 보여주세요." },
+    { cat: "마지막 한마디", text: "입사 후 첫 3개월 동안 어떤 목표를 세우고 싶으신가요?", tip: "💡 구체적이고 현실적인 목표를 제시하면 신뢰감을 줍니다." },
+  ],
+  공기업: [
+    { cat: "자기소개", text: "자기소개를 해주세요.", tip: "💡 공기업은 안정성보다 전문성과 공공 기여 의지를 강조하세요." },
+    { cat: "지원동기", text: "공기업(공공기관)에 지원한 동기를 말씀해 주세요.", tip: "💡 공공의 이익과 사회적 가치 창출에 대한 진심을 담으세요." },
+    { cat: "직무이해", text: "지원 직무에서 가장 중요한 역량은 무엇이라고 생각하나요?", tip: "💡 기관의 주요 사업과 연결하여 답변하면 좋습니다." },
+    { cat: "경험/역량", text: "직무와 관련된 경험이나 프로젝트를 말씀해 주세요.", tip: "💡 전공, 인턴, 봉사활동 등 다양한 경험을 연결하세요." },
+    { cat: "책임감", text: "맡은 일을 끝까지 완수했던 경험을 말씀해 주세요.", tip: "💡 어려움이 있었음에도 책임지고 마무리한 사례를 말하세요." },
+    { cat: "소통/협력", text: "다양한 이해관계자와 소통했던 경험을 말씀해 주세요.", tip: "💡 공기업은 민원 대응·내외부 협력을 중시합니다." },
+    { cat: "윤리/청렴", text: "업무상 윤리적 판단이 필요했던 상황과 어떻게 대처했는지 말씀해 주세요.", tip: "💡 규정과 원칙을 우선시하는 태도를 명확히 보여주세요." },
+    { cat: "문제해결", text: "기존 방식의 문제점을 발견하고 개선했던 경험이 있나요?", tip: "💡 작은 개선이라도 구체적 과정과 결과를 말하세요." },
+    { cat: "비전", text: "입사 후 이 기관에서 어떤 역할을 하고 싶으신가요?", tip: "💡 기관의 중장기 전략이나 주요 사업과 연결하세요." },
+    { cat: "마지막 한마디", text: "마지막으로 하고 싶은 말씀이 있으신가요?", tip: "💡 공공 가치에 대한 진정성 있는 포부를 간결하게 말하세요." },
+  ],
+  보건의료직: [
+    { cat:"자기소개", text:"자기소개를 해주세요.", tip:"💡 해당 직종 면허·자격 취득 경위와 임상 경험을 중심으로 말하세요." },
+    { cat:"지원동기", text:"이 기관·직무에 지원한 동기를 말씀해 주세요.", tip:"💡 기관의 특성(대상 환자군, 치료 철학 등)과 연결해 말하세요." },
+    { cat:"임상역량", text:"임상 실습 또는 근무 중 가장 인상 깊었던 케이스를 말씀해 주세요.", tip:"💡 평가 → 목표 설정 → 중재 → 결과 순으로 설명하세요." },
+    { cat:"대상자대응", text:"치료에 비협조적인 환자(또는 보호자)를 어떻게 대응하겠습니까?", tip:"💡 공감과 동기 강화 상담 기법을 언급하면 좋습니다." },
+    { cat:"팀협업", text:"다직종 팀(의사·간호사·사회복지사 등)과 협업한 경험을 말씀해 주세요.", tip:"💡 팀 내 역할과 의사소통 방식을 구체적으로 말하세요." },
+    { cat:"전문성", text:"최신 치료 기법이나 연구 동향 중 관심 있는 분야를 말씀해 주세요.", tip:"💡 해당 직종의 최신 트렌드를 공부하고 있음을 보여주세요." },
+    { cat:"스트레스관리", text:"감정적으로 힘든 케이스를 어떻게 극복했는지 말씀해 주세요.", tip:"💡 소진 예방과 자기 돌봄 전략을 구체적으로 말하세요." },
+    { cat:"윤리", text:"치료 과정에서 윤리적 갈등 상황이 생긴다면 어떻게 대처하겠습니까?", tip:"💡 대상자 자기결정권 존중과 전문가 윤리를 연결해 말하세요." },
+    { cat:"강점/약점", text:"보건의료 전문직으로서 본인의 강점과 약점을 말씀해 주세요.", tip:"💡 임상 현장에서 실제 도움이 되는 강점을 말하세요." },
+    { cat:"마지막한마디", text:"마지막으로 하고 싶은 말씀이 있으신가요?", tip:"💡 대상자와 기관을 위한 포부를 진심을 담아 말하세요." },
+  ],
+  서비스직: [
+    { cat:"자기소개", text:"자기소개를 해주세요.", tip:"💡 관련 경력·자격·기술을 중심으로 간결하게 말하세요." },
+    { cat:"지원동기", text:"이 직종·기관에 지원한 동기를 말씀해 주세요.", tip:"💡 해당 서비스 분야에 대한 진정성 있는 이유를 말하세요." },
+    { cat:"고객대응", text:"불만을 제기하는 고객을 어떻게 응대하겠습니까?", tip:"💡 공감 → 경청 → 해결 → 사후관리 순서로 답변하세요." },
+    { cat:"서비스마인드", text:"좋은 서비스란 무엇이라고 생각하나요?", tip:"💡 본인만의 서비스 철학을 구체적 경험으로 뒷받침하세요." },
+    { cat:"실무역량", text:"본인이 가진 가장 핵심적인 기술·역량을 말씀해 주세요.", tip:"💡 자격증, 수상 경력, 실습 경험 등을 구체적으로 말하세요." },
+    { cat:"체력·위생", text:"서비스직은 체력과 위생 관리가 중요합니다. 어떻게 관리하시나요?", tip:"💡 건강 관리 루틴과 위생 습관을 구체적으로 말하세요." },
+    { cat:"팀워크", text:"동료와 협력했던 경험이나 갈등을 해결한 사례를 말씀해 주세요.", tip:"💡 서비스직은 팀워크와 분위기가 고객 만족에 직결됩니다." },
+    { cat:"트렌드", text:"최근 본인 분야의 트렌드 중 주목하는 것이 있나요?", tip:"💡 꾸준히 공부하고 있다는 인상을 주세요." },
+    { cat:"강점/약점", text:"본인의 강점과 약점을 말씀해 주세요.", tip:"💡 서비스 현장에 맞는 강점을 구체적으로 말하세요." },
+    { cat:"마지막한마디", text:"마지막으로 하고 싶은 말씀이 있으신가요?", tip:"💡 고객과 기관을 위한 포부를 간결하게 전달하세요." },
+  ],
+  의료기관: [
+    { cat:"자기소개", text:"자기소개를 해주세요.", tip:"💡 의료·보건 분야 지원 동기와 관련 경험을 중심으로 말하세요." },
+    { cat:"지원동기", text:"이 기관에 지원한 동기를 말씀해 주세요.", tip:"💡 기관의 특성(전문 진료과, 운영 철학 등)과 연결해 말하세요." },
+    { cat:"서비스마인드", text:"환자나 이용자 중심 서비스가 왜 중요한지 본인의 생각을 말씀해 주세요.", tip:"💡 의료기관은 서비스 마인드를 매우 중시합니다." },
+    { cat:"갈등대응", text:"환자나 보호자가 불만을 제기할 때 어떻게 대응하겠습니까?", tip:"💡 공감 → 경청 → 해결 순서로 답변을 구성하세요." },
+    { cat:"팀워크", text:"다직종 팀과 협업했던 경험을 말씀해 주세요.", tip:"💡 의료 현장은 의사·간호사·행정·복지 등 다직종 협업이 필수입니다." },
+    { cat:"스트레스관리", text:"감정적으로 힘든 상황에서 어떻게 스트레스를 관리하시나요?", tip:"💡 의료·복지 종사자의 소진(번아웃) 관리 역량을 보여주세요." },
+    { cat:"강점/약점", text:"본인의 강점과 약점을 말씀해 주세요.", tip:"💡 약점은 극복 노력과 함께 말하세요." },
+    { cat:"의료윤리", text:"업무 중 윤리적 판단이 필요한 상황이 생긴다면 어떻게 하겠습니까?", tip:"💡 개인정보 보호, 환자 권리, 공정한 서비스 제공 측면을 말하세요." },
+    { cat:"전문성개발", text:"직무 전문성을 높이기 위해 어떤 노력을 하고 있나요?", tip:"💡 관련 자격증, 교육 이수, 자기계발 계획을 말하세요." },
+    { cat:"마지막한마디", text:"마지막으로 하고 싶은 말씀이 있으신가요?", tip:"💡 기관과 환자·이용자를 위한 포부를 간결하게 전달하세요." },
+  ],
+  사회복지: [
+    { cat:"자기소개", text:"자기소개를 해주세요.", tip:"💡 사회복지 분야에 관심을 갖게 된 계기와 관련 경험을 말하세요." },
+    { cat:"지원동기", text:"사회복지 분야, 그리고 이 기관에 지원한 동기를 말씀해 주세요.", tip:"💡 단순 봉사 경험을 넘어 전문적 역량 개발 의지를 보여주세요." },
+    { cat:"클라이언트대응", text:"어려운 클라이언트 상황을 경험했거나 예상되는 사례를 말씀해 주세요.", tip:"💡 공감 능력과 전문적 개입 방법을 함께 보여주세요." },
+    { cat:"위기개입", text:"클라이언트가 위기 상황에 처해 있을 때 어떻게 대응하겠습니까?", tip:"💡 위기개입 절차와 자원 연계 방법을 구체적으로 말하세요." },
+    { cat:"팀워크", text:"팀 혹은 기관 내 협업 경험을 말씀해 주세요.", tip:"💡 사회복지는 내외부 자원 연계와 협력이 핵심입니다." },
+    { cat:"소진관리", text:"감정 노동과 소진(번아웃)을 어떻게 관리하시나요?", tip:"💡 자기 돌봄(self-care) 방법과 슈퍼비전 활용을 언급하면 좋습니다." },
+    { cat:"강점/약점", text:"본인의 강점과 약점을 말씀해 주세요.", tip:"💡 복지 현장에서 실제로 도움이 되는 강점을 구체적으로 말하세요." },
+    { cat:"윤리", text:"클라이언트의 자기결정권과 보호 사이에서 갈등이 생긴다면 어떻게 하겠습니까?", tip:"💡 사회복지 윤리강령을 토대로 답변하세요." },
+    { cat:"전문성개발", text:"사회복지사로서 전문성을 높이기 위한 계획을 말씀해 주세요.", tip:"💡 자격증, 보수교육, 슈퍼비전 등을 구체적으로 언급하세요." },
+    { cat:"마지막한마디", text:"마지막으로 하고 싶은 말씀이 있으신가요?", tip:"💡 클라이언트와 지역사회를 위한 포부를 진심을 담아 말하세요." },
+  ],
+  교육기관: [
+    { cat:"자기소개", text:"자기소개를 해주세요.", tip:"💡 교육 분야 경험과 교육에 대한 신념을 중심으로 말하세요." },
+    { cat:"교육철학", text:"본인의 교육 철학이나 교육에 대한 가치관을 말씀해 주세요.", tip:"💡 구체적인 경험이나 사례로 뒷받침하면 좋습니다." },
+    { cat:"학생지도", text:"학습이 어렵거나 문제 행동을 보이는 학생을 어떻게 지도하겠습니까?", tip:"💡 개별 학생에 대한 이해와 맞춤형 접근을 보여주세요." },
+    { cat:"소통", text:"학부모(또는 상급자)와 의견 충돌이 생겼을 때 어떻게 대처하겠습니까?", tip:"💡 경청과 협력을 통한 문제 해결 능력을 보여주세요." },
+    { cat:"수업기획", text:"기억에 남는 수업이나 프로그램을 기획·진행한 경험을 말씀해 주세요.", tip:"💡 기획 의도 → 실행 → 결과 순으로 구성하세요." },
+    { cat:"동기부여", text:"학습 의욕이 없는 학생의 동기를 어떻게 끌어올리겠습니까?", tip:"💡 실제 경험이나 구체적인 방법을 제시하세요." },
+    { cat:"강점/약점", text:"교육자로서 본인의 강점과 약점을 말씀해 주세요.", tip:"💡 약점은 극복 노력과 함께 말하세요." },
+    { cat:"트렌드", text:"최근 교육 트렌드 중 주목하는 것이 있다면 말씀해 주세요.", tip:"💡 AI교육, 에듀테크, 개별화학습 등 최신 흐름을 언급하세요." },
+    { cat:"팀워크", text:"동료 교직원 또는 팀과 협력했던 경험을 말씀해 주세요.", tip:"💡 교육 기관도 협업과 소통이 중요합니다." },
+    { cat:"마지막한마디", text:"마지막으로 하고 싶은 말씀이 있으신가요?", tip:"💡 학생과 기관을 위한 포부를 간결하게 전달하세요." },
+  ],
+  공무원: [
+    { cat: "자기소개", text: "자기소개를 해주세요.", tip: "💡 공직에 적합한 성품과 경험을 중심으로 말하세요." },
+    { cat: "지원동기", text: "공무원에 지원한 동기를 말씀해 주세요.", tip: "💡 '안정성' 외의 진정성 있는 이유를 말하세요." },
+    { cat: "공직관", text: "공무원에게 가장 중요한 덕목은 무엇이라고 생각하나요?", tip: "💡 청렴, 책임감, 봉사정신 등을 구체적 예시와 함께 말하세요." },
+    { cat: "경험/역량", text: "업무에서 윤리적 딜레마 상황이 발생하면 어떻게 하겠습니까?", tip: "💡 원칙과 규정을 우선시하는 태도를 보여주세요." },
+    { cat: "시사/정책", text: "지원 부처의 주요 정책이나 현안에 대해 설명해주세요.", tip: "💡 해당 부처 홈페이지를 미리 확인하고 준비하세요." },
+    { cat: "갈등해결", text: "민원인이 부당한 요구를 할 경우 어떻게 대처하겠습니까?", tip: "💡 원칙 준수 + 공감적 소통 태도를 보여주세요." },
+    { cat: "역량개발", text: "담당 업무의 전문성을 높이기 위해 어떻게 노력하겠습니까?", tip: "💡 구체적인 학습 계획을 언급하면 좋습니다." },
+    { cat: "협업/조직", text: "상사의 지시가 불합리하다고 생각될 때 어떻게 하겠습니까?", tip: "💡 소통과 원칙 사이의 균형을 보여주세요." },
+    { cat: "자기계발", text: "공무원으로서 본인의 강점을 말씀해 주세요.", tip: "💡 공직 수행과 연관된 역량을 구체적으로 말하세요." },
+    { cat: "마지막 한마디", text: "마지막으로 하고 싶은 말씀이 있으신가요?", tip: "💡 공직에 대한 포부와 다짐을 간결하게 말하세요." },
+  ],
+};
+
+// ══════════════════════════════════
+//  INDUSTRY / COMPANY DATA
+// ══════════════════════════════════
+const INDUSTRIES = [
+  { icon:'🚗', name:'자동차·모빌리티', rank:'현대차그룹 재계 2위',
+    companies:['현대자동차','기아','현대모비스','현대제철','현대건설','현대글로비스','기아모빌리티'],
+    roles:['해외영업','국내영업','마케팅','생산관리','품질관리','연구개발(R&D)','구매','재무회계','인사','IT개발'] },
+  { icon:'💻', name:'전자·IT·반도체', rank:'삼성·SK 재계 1·3위',
+    companies:['삼성전자','SK하이닉스','LG전자','삼성디스플레이','LG디스플레이','삼성SDI','LG에너지솔루션'],
+    roles:['SW개발','HW개발','반도체공정','마케팅','해외영업','서비스기획','데이터분석','QA/테스트','인프라','재무'] },
+  { icon:'⚗️', name:'화학·에너지·배터리', rank:'LG·SK·롯데 계열',
+    companies:['LG화학','SK이노베이션','롯데케미칼','한화솔루션','효성첨단소재','SK지오센트릭','GS칼텍스'],
+    roles:['연구개발','생산관리','영업','마케팅','환경안전','품질','구매','플랜트엔지니어링','해외사업'] },
+  { icon:'🏦', name:'금융·보험·증권', rank:'삼성생명·KB·신한',
+    companies:['삼성생명','KB국민은행','신한은행','하나은행','우리은행','삼성화재','미래에셋증권','NH투자증권'],
+    roles:['개인금융','기업금융(IB)','리스크관리','자산운용','보험심사','IT개발','디지털전략','준법감시','HR'] },
+  { icon:'🛒', name:'유통·소비재·식품', rank:'롯데·신세계·CJ 계열',
+    companies:['롯데쇼핑','신세계','이마트','CJ제일제당','오리온','농심','하이트진로','롯데웰푸드'],
+    roles:['MD(바이어)','마케팅','영업','물류','SCM','브랜드전략','신사업기획','해외사업','HR','재무'] },
+  { icon:'✈️', name:'항공·물류·해운', rank:'대한항공·HMM',
+    companies:['대한항공','아시아나항공','CJ대한통운','현대글로비스','한진','HMM','롯데글로벌로지스'],
+    roles:['운항관리','객실승무','화물영업','물류기획','해외영업','IT시스템','항공정비','SCM','마케팅'] },
+  { icon:'💊', name:'제약·바이오·헬스케어', rank:'삼성바이오·셀트리온',
+    companies:['삼성바이오로직스','셀트리온','한미약품','유한양행','GC녹십자','동아ST','보령제약'],
+    roles:['연구개발(R&D)','임상개발','의약품영업(MR)','마케팅','허가·인증','생산품질','해외사업','BD·라이선싱'] },
+  { icon:'🔩', name:'철강·건설·중공업', rank:'POSCO·현대중공업',
+    companies:['POSCO홀딩스','현대중공업','삼성물산(건설)','현대건설','GS건설','대우건설','HD현대'],
+    roles:['시공관리','설계','영업','해외사업','구매','안전관리','연구개발','플랜트','재무','인사'] },
+  { icon:'📡', name:'통신·미디어·플랫폼', rank:'SKT·KT·카카오·네이버',
+    companies:['SK텔레콤','KT','LG유플러스','네이버','카카오','쿠팡','배달의민족(우아한형제들)'],
+    roles:['서비스기획','SW개발','데이터분석','마케팅','B2B영업','콘텐츠전략','UX디자인','AI/ML','인프라','재무'] },
+];
+
+// ──────────────────────────────────
+//  공기업 데이터
+// ──────────────────────────────────
+const PUBLIC_SECTORS = [
+  { icon:'⚡', name:'에너지·전력', desc:'한전·가스공사·석유공사',
+    orgs:['한국전력공사(한전)','한국가스공사','한국석유공사','한국수력원자력','한국지역난방공사','한전KPS'],
+    roles:['전력계통운영','발전설비관리','영업·고객서비스','IT·디지털','재무회계','기획전략','환경안전','연구개발'] },
+  { icon:'🚂', name:'교통·인프라', desc:'코레일·도로공사·LH',
+    orgs:['한국철도공사(코레일)','한국도로공사','한국토지주택공사(LH)','한국공항공사','인천국제공항공사','서울교통공사'],
+    roles:['역무·운송','시설유지보수','토목·건축','교통기획','안전관리','IT시스템','고객서비스','재무'] },
+  { icon:'💰', name:'금융·보험·연금', desc:'국민연금·주택금융·산업은행',
+    orgs:['국민연금공단','주택금융공사','한국산업은행','IBK기업은행','신용보증기금','기술보증기금','예금보험공사'],
+    roles:['기금운용','여신심사','리스크관리','IT개발','재무회계','고객상담','기획','법무·준법'] },
+  { icon:'🏥', name:'의료·복지·건강', desc:'건보·심평원·국민건강',
+    orgs:['국민건강보험공단','건강보험심사평가원','한국보건복지정보개발원','근로복지공단','한국사회보장정보원'],
+    roles:['보험심사','급여기획','IT개발','사회복지','통계분석','고객지원','법무','경영기획'] },
+  { icon:'🌿', name:'환경·수자원', desc:'수자원공사·환경공단',
+    orgs:['한국수자원공사(K-water)','한국환경공단','국립환경과학원','한국환경산업기술원'],
+    roles:['수질관리','환경기술','토목·수리','IT시스템','환경정책','안전관리','연구개발','기획행정'] },
+  { icon:'🎭', name:'문화·관광·체육', desc:'관광공사·콘텐츠진흥원',
+    orgs:['한국관광공사','한국콘텐츠진흥원','국민체육진흥공단','한국문화예술위원회','영화진흥위원회'],
+    roles:['관광마케팅','콘텐츠기획','해외홍보','체육행정','문화기획','IT플랫폼','국제협력','재무행정'] },
+  { icon:'🔬', name:'산업·기술·진흥', desc:'코트라·무역보험·산업기술',
+    orgs:['KOTRA(대한무역투자진흥공사)','한국무역보험공사','한국산업기술진흥원','중소벤처기업진흥공단','한국특허정보원'],
+    roles:['해외시장조사','무역지원','기술평가','벤처지원','기획·조사','IT개발','국제통상','재무회계'] },
+];
+
+// ──────────────────────────────────
+//  공무원 데이터
+// ──────────────────────────────────
+const CIVIL_EXAMS = [
+  { icon:'📋', name:'국가직 9급', desc:'국가공무원 일반직 9급 공채',
+    serials:['일반행정','세무','관세','사회복지','교육행정','전산개발','통계','교정','검찰','출입국관리'] },
+  { icon:'📘', name:'국가직 7급', desc:'국가공무원 일반직 7급 공채',
+    serials:['일반행정','재경','국제통상','사회복지','교육행정','전산개발','통계','법무행정','검찰','방재안전'] },
+  { icon:'🎓', name:'5급 공채 (행정고시)', desc:'행정고시·기술고시',
+    serials:['행정(일반행정)','행정(재경)','행정(국제통상)','행정(교육행정)','기술(전산)','기술(토목)','기술(건축)','기술(전기)','기술(환경)'] },
+  { icon:'🌐', name:'외교관후보자 시험', desc:'외교부 외무공무원',
+    serials:['일반외교','외교통상','재외국민영사','국제법·국제기구','지역전문가(아시아)','지역전문가(유럽·미주)'] },
+  { icon:'🏙️', name:'지방직 9급', desc:'광역·기초 지방자치단체',
+    serials:['일반행정','사회복지','세무·지방세','전산정보','토목','건축','도시계획','환경','보건','교통'] },
+  { icon:'🏛️', name:'지방직 7급', desc:'광역시·도 지방자치단체',
+    serials:['일반행정','재무회계','사회복지','전산정보','토목·도시계획','건축','환경·위생','보건의료','교통행정'] },
+  { icon:'⚖️', name:'입법고시', desc:'국회 사무처·도서관',
+    serials:['행정직(5급)','사서직(5급)','속기직','전산직','방호직'] },
+  { icon:'👨‍⚖️', name:'법조인 채용 (검사·판사·변호사)', desc:'사법시험·변호사시험 합격 후 임용 면접',
+    serials:['검사(검찰청)','법관(법원)','변호사(법무법인·로펌)','헌법연구관(헌재)','국선변호인','법제처 법제관'] },
+];
+
+// ──────────────────────────────────
+//  중소기업·스타트업 데이터
+// ──────────────────────────────────
+const HEALTH_PRO_SECTORS = [
+  { icon:'🗣️', name:'언어재활사', desc:'병원·복지관·학교·센터',
+    roles:['언어재활사(임상)','언어재활사(아동)','언어재활사(성인·노인)','언어재활사(뇌손상)','연구·교육','행정지원'] },
+  { icon:'🦾', name:'물리치료사', desc:'병원·요양원·스포츠센터',
+    roles:['물리치료사(근골격계)','물리치료사(신경계)','물리치료사(소아)','스포츠재활','방문재활','행정지원'] },
+  { icon:'🖐️', name:'작업치료사', desc:'병원·복지관·학교',
+    roles:['작업치료사(신체기능)','작업치료사(인지재활)','작업치료사(소아)','직업재활','보조공학','행정지원'] },
+  { icon:'🧠', name:'임상심리·상담사', desc:'병원·상담센터·복지관',
+    roles:['임상심리사','심리상담사','정신건강복지사','청소년상담사','집단상담기획','행정지원'] },
+  { icon:'🥗', name:'영양사·치위생사', desc:'병원·급식기관·치과',
+    roles:['임상영양사','영양교사','단체급식영양사','치과위생사(임상)','치과위생사(예방)','행정지원'] },
+  { icon:'🔬', name:'임상병리·방사선사', desc:'병원·검진센터',
+    roles:['임상병리사','방사선사','초음파검사','핵의학기사','행정·원무지원'] },
+];
+
+const SERVICE_SECTORS = [
+  { icon:'✂️', name:'미용·뷰티', desc:'헤어살롱·피부관리·네일',
+    roles:['헤어디자이너','피부관리사','네일아티스트','메이크업아티스트','살롱매니저','원장·창업'] },
+  { icon:'🍽️', name:'외식·F&B', desc:'레스토랑·카페·호텔식음료',
+    roles:['홀서비스','바리스타','조리사·셰프','매장관리','식음료기획','프랜차이즈운영'] },
+  { icon:'🏨', name:'호텔·숙박·관광', desc:'호텔·리조트·여행사',
+    roles:['프런트데스크','객실관리','컨시어지','식음료서비스','여행상품기획','관광가이드','예약운영'] },
+  { icon:'✈️', name:'항공·면세·서비스', desc:'지상직·승무원·면세점',
+    roles:['객실승무원','지상직(공항서비스)','면세점판매','항공예약·발권','VIP라운지서비스'] },
+  { icon:'🏋️', name:'스포츠·피트니스', desc:'PT·수영·스포츠센터',
+    roles:['퍼스널트레이너(PT)','필라테스강사','수영강사','스포츠센터관리','생활체육지도사'] },
+];
+
+const MEDICAL_SECTORS = [
+  { icon:'🏨', name:'종합·상급병원', desc:'대학병원·종합병원·상급종합',
+    roles:['원무행정','의무기록','의료사회복지사','코디네이터','원내약무','건강증진','재활보조','임상병리보조','방사선보조','간호조무'] },
+  { icon:'🏠', name:'요양·재활시설', desc:'요양병원·요양원·재활병원',
+    roles:['요양보호','재활보조','사회복지사','프로그램기획','행정지원','영양관리','물리치료보조','작업치료보조','간호조무','시설운영'] },
+  { icon:'💉', name:'의원·클리닉', desc:'내과·치과·한의원·피부과 등',
+    roles:['의료코디네이터','원무행정','간호조무','치과조무','물리치료보조','상담실장','마케팅','재무회계'] },
+  { icon:'🏛️', name:'보건소·공공보건', desc:'보건소·보건지소·질병관리',
+    roles:['보건행정','건강증진','방문건강관리','예방접종','통계·역학','환경보건','정신건강','모자보건','재활서비스'] },
+];
+
+const WELFARE_SECTORS = [
+  { icon:'🏘️', name:'종합사회복지관', desc:'지역사회복지관·주민센터',
+    roles:['사례관리','프로그램기획','자원봉사관리','지역조직화','행정지원','상담','재가복지','드림스타트','긴급복지'] },
+  { icon:'👴', name:'노인복지시설', desc:'경로당·노인복지관·주야간보호',
+    roles:['생활지도원','사회복지사','프로그램기획','요양보호','영양관리','재활보조','행정지원','상담'] },
+  { icon:'♿', name:'장애인복지시설', desc:'장애인복지관·직업재활·거주시설',
+    roles:['사회복지사','직업재활사','생활지도원','특수교육보조','상담','프로그램기획','보조공학','행정지원'] },
+  { icon:'🌱', name:'NGO · 비영리재단', desc:'시민단체·재단·사회적기업',
+    roles:['사업기획','모금·펀드레이징','홍보·마케팅','국제협력','자원봉사관리','연구·조사','행정지원','커뮤니케이션'] },
+];
+
+const EDU_SECTORS = [
+  { icon:'🏫', name:'초·중·고등학교', desc:'공립·사립·특수학교',
+    roles:['교과교사','상담교사','행정실','보건교사','특수교사','스포츠강사','방과후교사','영양교사'] },
+  { icon:'🎒', name:'학원 · 교습소', desc:'입시·어학·예체능·코딩학원',
+    roles:['강사','원장·부원장','교육설계','학생상담','학부모상담','마케팅·입학','행정·회계','커리큘럼개발'] },
+  { icon:'💻', name:'에듀테크 · 교육기업', desc:'온라인교육·콘텐츠·플랫폼',
+    roles:['콘텐츠기획','교육설계(ID)','강사·튜터','마케팅','서비스기획','SW개발','데이터분석','영업·B2B'] },
+  { icon:'🎓', name:'대학교 · 연구소', desc:'대학교·직업훈련기관·연구원',
+    roles:['행정직원','입학관리','학생지원','연구보조','취업지원','교육프로그램기획','산학협력','홍보'] },
+];
+
+const SME_SECTORS = [
+  { icon:'💻', name:'IT·SaaS·플랫폼', desc:'소프트웨어·앱·플랫폼 서비스',
+    roles:['프론트엔드개발','백엔드개발','풀스택개발','데이터분석','DevOps·인프라','서비스기획','UX/UI디자인','마케팅·그로스','세일즈','CS운영'] },
+  { icon:'🏭', name:'제조·하드웨어', desc:'전자부품·기계·소재 제조',
+    roles:['생산관리','품질관리(QC)','연구개발(R&D)','설계·CAD','영업','구매·소싱','공정개선','안전보건','해외영업','물류SCM'] },
+  { icon:'🛍️', name:'유통·이커머스', desc:'온라인몰·D2C·리테일',
+    roles:['MD(머천다이징)','마케팅·광고','물류·배송','고객서비스','데이터분석','서비스기획','콘텐츠마케팅','영업','재무','인사'] },
+  { icon:'💊', name:'바이오·헬스케어', desc:'바이오벤처·디지털헬스·의료기기',
+    roles:['연구개발','임상·규제','마케팅(MR)','사업개발(BD)','생산품질','데이터분석','서비스기획','해외사업','재무','HR'] },
+  { icon:'🎬', name:'콘텐츠·미디어·게임', desc:'영상·음악·게임·광고',
+    roles:['콘텐츠기획','영상제작','게임개발','마케팅','SNS운영','브랜드전략','세일즈','데이터분석','디자인','퍼포먼스마케팅'] },
+  { icon:'💳', name:'핀테크·블록체인', desc:'간편결제·투자·보험테크',
+    roles:['백엔드개발','보안·컴플라이언스','상품기획','리스크관리','마케팅','데이터분석','고객서비스','BD·파트너십','재무','법무'] },
+  { icon:'🤝', name:'서비스·컨설팅·교육', desc:'B2B서비스·교육·HR테크',
+    roles:['컨설팅·전략','사업개발','영업','교육기획','HR컨설팅','마케팅','운영기획','데이터분석','IT개발','재무'] },
+];
+
+// ══════════════════════════════════
+//  STATE
+// ══════════════════════════════════
+let state = {
+  type: '대기업',
+  sectorIdx: null,   // 산업군/분야/업종/시험종류 인덱스
+  company: '',       // 기업명 / 기관명
+  role: '',          // 직무 / 직렬
+  examName: '',      // 공무원 시험명 (표시용)
+  name: '',
+  questions: [],
+  currentQ: 0,
+  scores: [],
+  feedbacks: [],
+  totalScore: 0,
+};
+
+// ══════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════
+function showSection(id) {
+  ['landing','setup','interview','result'].forEach(s => {
+    document.getElementById(s).style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'flex';
+}
+
+function setStepUI(active) {
+  [1,2,3,4].forEach(i => {
+    const dot = document.getElementById('dot-'+i);
+    dot.classList.remove('active','done');
+    if (i < active) { dot.classList.add('done'); dot.textContent = '✓'; }
+    else if (i === active) { dot.classList.add('active'); dot.textContent = i; }
+    else dot.textContent = i;
+  });
+  [1,2,3].forEach(i => {
+    document.getElementById('line-'+i).classList.toggle('done', i < active);
+  });
+  ['step1','step2','step3','step4'].forEach((id, idx) => {
+    document.getElementById(id).style.display = (idx + 1 === active) ? 'block' : 'none';
+  });
+}
+
+function showSetup() {
+  showSection('setup');
+  state.sectorIdx = null; state.company = ''; state.role = ''; state.examName = '';
+  setStepUI(1);
+}
+
+function selectType(el, type) {
+  document.querySelectorAll('#step1 .type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.type = type;
+  state.sectorIdx = null; state.company = ''; state.role = '';
+}
+
+function goStep1() { setStepUI(1); }
+
+// ── STEP 2: 산업군/분야/업종/시험종류 ──
+function goStep2() {
+  setStepUI(2);
+  const title = document.getElementById('step2-title');
+  const sub   = document.getElementById('step2-sub');
+  const grid  = document.getElementById('industry-grid');
+
+  grid.style.display = 'grid';
+  let dataArr, titleTxt, subTxt;
+
+  if (state.type === '대기업') {
+    titleTxt = '산업군을 선택해 주세요';
+    subTxt   = '재계·매출 순위 기준 9대 산업군입니다.';
+    dataArr  = INDUSTRIES;
+  } else if (state.type === '공기업') {
+    titleTxt = '기관 분야를 선택해 주세요';
+    subTxt   = '분야별 주요 공기업·공공기관입니다.';
+    dataArr  = PUBLIC_SECTORS;
+  } else if (state.type === '공무원') {
+    titleTxt = '시험 종류를 선택해 주세요';
+    subTxt   = '국가직·지방직·고시·특채 등 시험을 먼저 고르세요.';
+    dataArr  = CIVIL_EXAMS;
+  } else if (state.type === '보건의료직') {
+    titleTxt = '직종을 선택해 주세요';
+    subTxt   = '지원하는 보건의료 전문직종을 선택하세요.';
+    dataArr  = HEALTH_PRO_SECTORS;
+  } else if (state.type === '서비스직') {
+    titleTxt = '분야를 선택해 주세요';
+    subTxt   = '지원하는 서비스 분야를 선택하세요.';
+    dataArr  = SERVICE_SECTORS;
+  } else if (state.type === '의료기관') {
+    titleTxt = '기관 유형을 선택해 주세요';
+    subTxt   = '지원하는 의료·보건기관 유형을 선택하세요.';
+    dataArr  = MEDICAL_SECTORS;
+  } else if (state.type === '사회복지') {
+    titleTxt = '기관 유형을 선택해 주세요';
+    subTxt   = '지원하는 복지·NGO 기관 유형을 선택하세요.';
+    dataArr  = WELFARE_SECTORS;
+  } else if (state.type === '교육기관') {
+    titleTxt = '기관 유형을 선택해 주세요';
+    subTxt   = '지원하는 교육기관 유형을 선택하세요.';
+    dataArr  = EDU_SECTORS;
+  } else { // 중소기업
+    titleTxt = '업종을 선택해 주세요';
+    subTxt   = '지원하는 회사의 업종을 선택하세요.';
+    dataArr  = SME_SECTORS;
+  }
+
+  title.textContent = titleTxt;
+  sub.textContent   = subTxt;
+  grid.innerHTML = dataArr.map((item, i) => `
+    <div class="industry-card ${state.sectorIdx===i?'selected':''}" onclick="selectSector(this,${i})">
+      <div class="ind-icon">${item.icon}</div>
+      <div class="ind-name">${item.name}</div>
+      <div class="ind-rank">${item.desc || item.rank || ''}</div>
+    </div>`).join('');
+}
+
+function selectSector(el, idx) {
+  document.querySelectorAll('#industry-grid .industry-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.sectorIdx = idx;
+}
+
+// ── STEP 3: 기업/기관/직렬 선택 ──
+function goStep3() {
+  if (state.sectorIdx === null) { alert('선택해 주세요.'); return; }
+  setStepUI(3);
+
+  const title = document.getElementById('step3-title');
+  const companyGrid = document.getElementById('company-grid');
+  const directInput = document.getElementById('company-direct-input');
+  const directWrap  = document.getElementById('step3-direct-wrap');
+
+  if (state.type === '대기업') {
+    const ind = INDUSTRIES[state.sectorIdx];
+    title.textContent = `${ind.icon} ${ind.name} — 기업 선택`;
+    companyGrid.innerHTML = ind.companies.map(c =>
+      `<span class="company-chip ${state.company===c?'selected':''}" onclick="selectCompany(this,'${c}')">${c}</span>`).join('');
+    directWrap.style.display = 'block';
+    directInput.placeholder = '예: 포스코홀딩스, 한화에어로스페이스 등';
+    directInput.value = (!ind.companies.includes(state.company)) ? state.company : '';
+
+  } else if (state.type === '공기업') {
+    const sec = PUBLIC_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 기관 선택`;
+    companyGrid.innerHTML = sec.orgs.map(o =>
+      `<span class="company-chip ${state.company===o?'selected':''}" onclick="selectCompany(this,'${o}')">${o}</span>`).join('');
+    directWrap.style.display = 'block';
+    directInput.placeholder = '위 목록에 없으면 직접 입력';
+    directInput.value = (!sec.orgs.includes(state.company)) ? state.company : '';
+
+  } else if (state.type === '공무원') {
+    const exam = CIVIL_EXAMS[state.sectorIdx];
+    title.textContent = `${exam.icon} ${exam.name} — 직렬 선택`;
+    state.examName = exam.name;
+    companyGrid.innerHTML = exam.serials.map(s =>
+      `<span class="company-chip ${state.company===s?'selected':''}" onclick="selectCompany(this,'${s}')">${s}</span>`).join('');
+    directWrap.style.display = 'block';
+    directInput.placeholder = '위 목록에 없는 직렬을 입력';
+    directInput.value = (!exam.serials.includes(state.company)) ? state.company : '';
+
+  } else if (state.type === '보건의료직') {
+    const sec = HEALTH_PRO_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 기관명 입력`;
+    companyGrid.innerHTML = '';
+    directWrap.style.display = 'block';
+    directInput.placeholder = '지원할 기관명을 입력하세요 (예: 서울아산병원, OO복지관 등)';
+    directInput.value = state.company;
+
+  } else if (state.type === '서비스직') {
+    const sec = SERVICE_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 기관명 입력`;
+    companyGrid.innerHTML = '';
+    directWrap.style.display = 'block';
+    directInput.placeholder = '지원할 업체명을 입력하세요 (예: 이니스프리, 롯데호텔, OO미용실 등)';
+    directInput.value = state.company;
+
+  } else if (state.type === '의료기관') {
+    const sec = MEDICAL_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 기관명 입력`;
+    companyGrid.innerHTML = '';
+    directWrap.style.display = 'block';
+    directInput.placeholder = '지원할 기관명을 입력하세요 (예: 서울대병원, OO요양원 등)';
+    directInput.value = state.company;
+
+  } else if (state.type === '사회복지') {
+    const sec = WELFARE_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 기관명 입력`;
+    companyGrid.innerHTML = '';
+    directWrap.style.display = 'block';
+    directInput.placeholder = '지원할 기관명을 입력하세요 (예: OO종합사회복지관, OO재단 등)';
+    directInput.value = state.company;
+
+  } else if (state.type === '교육기관') {
+    const sec = EDU_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 기관명 입력`;
+    companyGrid.innerHTML = '';
+    directWrap.style.display = 'block';
+    directInput.placeholder = '지원할 기관명을 입력하세요 (예: OO중학교, OO학원 등)';
+    directInput.value = state.company;
+
+  } else { // 중소기업
+    const sec = SME_SECTORS[state.sectorIdx];
+    title.textContent = `${sec.icon} ${sec.name} — 회사명 입력`;
+    companyGrid.innerHTML = '';
+    directWrap.style.display = 'block';
+    directInput.placeholder = '지원할 회사명을 입력하세요 (예: 토스, 카카오뱅크, 직방 등)';
+    directInput.value = state.company;
+  }
+}
+
+function selectCompany(el, name) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    state.company = '';
+  } else {
+    document.querySelectorAll('#company-grid .company-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.company = name;
+    document.getElementById('company-direct-input').value = '';
+  }
+}
+
+function goStep4() {
+  const direct = document.getElementById('company-direct-input').value.trim();
+  if (direct) state.company = direct;
+  if (!state.company) {
+    const msg = state.type === '공무원' ? '직렬을 선택하거나 입력해 주세요.' : '기업·기관명을 선택하거나 입력해 주세요.';
+    alert(msg); return;
+  }
+  goStep4direct();
+}
+
+function goStep4direct() {
+  setStepUI(4);
+
+  // 상단 표시 문구
+  let displayLabel = '';
+  if (state.type === '공무원') {
+    displayLabel = `${state.examName} · ${state.company} 직렬`;
+  } else {
+    displayLabel = state.company;
+  }
+  document.getElementById('step4-company-display').innerHTML =
+    `<span style="color:var(--accent)">📍 ${displayLabel}</span> 면접 준비 중`;
+
+  // 뒤로 버튼
+  document.getElementById('step4-back-btn').onclick = () => setStepUI(3);
+
+  // 직무·직렬 칩
+  let roles = [];
+  if (state.type === '대기업' && state.sectorIdx !== null) {
+    roles = INDUSTRIES[state.sectorIdx].roles;
+  } else if (state.type === '공기업' && state.sectorIdx !== null) {
+    roles = PUBLIC_SECTORS[state.sectorIdx].roles;
+  } else if (state.type === '공무원') {
+    // 직렬 선택이 곧 역할 → 직무 칩은 세부 업무로
+    roles = ['정책기획·입안','민원처리','예산·회계','감사·감찰','인사관리','법령해석','통계·분석','디지털·IT','국제협력','대민서비스'];
+  } else if (state.type === '중소기업' && state.sectorIdx !== null) {
+    roles = SME_SECTORS[state.sectorIdx].roles;
+  } else if (state.type === '보건의료직' && state.sectorIdx !== null) {
+    roles = HEALTH_PRO_SECTORS[state.sectorIdx].roles;
+  } else if (state.type === '서비스직' && state.sectorIdx !== null) {
+    roles = SERVICE_SECTORS[state.sectorIdx].roles;
+  } else if (state.type === '의료기관' && state.sectorIdx !== null) {
+    roles = MEDICAL_SECTORS[state.sectorIdx].roles;
+  } else if (state.type === '사회복지' && state.sectorIdx !== null) {
+    roles = WELFARE_SECTORS[state.sectorIdx].roles;
+  } else if (state.type === '교육기관' && state.sectorIdx !== null) {
+    roles = EDU_SECTORS[state.sectorIdx].roles;
+  }
+
+  const rc = document.getElementById('role-chips');
+  rc.innerHTML = roles.map(r =>
+    `<span class="role-chip ${state.role===r?'selected':''}" onclick="selectRole(this,'${r}')">${r}</span>`).join('');
+  document.getElementById('role-input').value = (state.role && !roles.includes(state.role)) ? state.role : '';
+}
+
+function selectRole(el, role) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    state.role = '';
+  } else {
+    document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.role = role;
+    document.getElementById('role-input').value = '';
+  }
+}
+
+function toggleApiKeyVisible() {}
+
+// 샘플 피드백 (API 연결 불가 시 자동 대체)
+function getMockFeedback(score) {
+  const s = score || Math.floor(Math.random() * 3) + 6; // 6~8점
+  const grade = s >= 9 ? 'A' : s >= 7 ? 'B' : s >= 5 ? 'C' : 'D';
+  return {
+    score: s, grade,
+    logic:    Math.min(100, s * 10 + Math.floor(Math.random()*10)),
+    specific: Math.min(100, s * 10 + Math.floor(Math.random()*10) - 5),
+    structure:Math.min(100, s * 10 + Math.floor(Math.random()*10) - 3),
+    delivery: Math.min(100, s * 10 + Math.floor(Math.random()*10) - 7),
+    good:     '답변의 전반적인 구성이 명확하고, 핵심 메시지를 잘 전달했습니다. 자신의 경험을 연결하려는 시도가 좋습니다.',
+    improve:  '조금 더 구체적인 수치나 사례를 추가하면 설득력이 높아집니다. 답변 길이를 1분 내외로 조절해보세요.',
+    suggest:  `${state.company} ${state.role} 직무와 연결된 구체적 경험을 STAR 기법(상황→과제→행동→결과)으로 정리해 답변에 녹여보세요.`
+  };
+}
+
+
+function startInterview() {
+  const directRole = document.getElementById('role-input').value.trim();
+  if (directRole) state.role = directRole;
+  if (!state.role) { alert('지원 직무를 선택하거나 입력해 주세요.'); return; }
+  state.name = document.getElementById('user-name').value.trim();
+
+  const qKey = (state.type === '중소기업') ? '중소기업' :
+               (state.type === '공기업')  ? '공기업'   :
+               (state.type === '공무원')  ? '공무원'   :
+               (state.type === '의료기관') ? '의료기관' :
+               (state.type === '사회복지') ? '사회복지' :
+               (state.type === '교육기관') ? '교육기관' :
+               (state.type === '보건의료직') ? '보건의료직' :
+               (state.type === '서비스직') ? '서비스직' : '대기업';
+  state.questions = [...QUESTION_BANKS[qKey]];
+  state.currentQ = 0;
+  state.scores = [];
+  state.feedbacks = [];
+  state.totalScore = 0;
+
+  const label = state.type === '공무원'
+    ? `${state.examName} · ${state.company} · ${state.role}`
+    : `${state.company} · ${state.role}`;
+  document.getElementById('tag-text').textContent = label + (state.name ? ' · ' + state.name : '');
+
+  showSection('interview');
+  loadQuestion(0);
+}
+
+function restart() {
+  showSection('landing');
+}
+
+// ══════════════════════════════════
+//  QUESTION LOGIC
+// ══════════════════════════════════
+function loadQuestion(idx) {
+  const q = state.questions[idx];
+  document.getElementById('q-num').textContent = idx + 1;
+  document.getElementById('q-category').textContent = q.cat;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-tip').textContent = q.tip;
+
+  const pct = ((idx) / 10) * 100;
+  document.getElementById('progress-fill').style.width = Math.max(pct, 5) + '%';
+  document.getElementById('running-score').textContent = state.totalScore;
+
+  // Reset UI
+  document.getElementById('answer-input').value = '';
+  document.getElementById('char-count').textContent = '0자';
+  document.getElementById('answer-section').style.display = 'block';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('feedback-card').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('helper-tip').textContent = '';
+
+  const loading = document.getElementById('loading-area');
+  loading.style.display = 'none';
+}
+
+// Char count
+document.getElementById('answer-input').addEventListener('input', function() {
+  document.getElementById('char-count').textContent = this.value.length + '자';
+});
+
+// ══════════════════════════════════
+//  AI FEEDBACK
+// ══════════════════════════════════
+async function submitAnswer() {
+  const answer = document.getElementById('answer-input').value.trim();
+  if (!answer || answer.length < 10) {
+    alert('답변을 10자 이상 입력해 주세요.');
+    return;
+  }
+
+  const q = state.questions[state.currentQ];
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('answer-section').style.display = 'none';
+
+  // Show loading
+  const loading = document.getElementById('loading-area');
+  loading.style.display = 'flex';
+
+  try {
+    let contextLabel = '';
+    if (state.type === '대기업' && state.sectorIdx !== null) contextLabel = INDUSTRIES[state.sectorIdx].name;
+    else if (state.type === '공기업' && state.sectorIdx !== null) contextLabel = PUBLIC_SECTORS[state.sectorIdx].name;
+    else if (state.type === '공무원') contextLabel = state.examName;
+    else if (state.type === '중소기업' && state.sectorIdx !== null) contextLabel = SME_SECTORS[state.sectorIdx].name;
+
+    const companyLabel = state.type === '공무원'
+      ? `${state.examName} · ${state.company} 직렬`
+      : state.company;
+
+    const prompt = `당신은 채용 전문 면접 코치입니다. 다음 면접 답변을 분석하고 피드백을 제공해주세요.
+
+[지원 유형]: ${state.type}
+[분야/시험]: ${contextLabel}
+[지원 기관·기업]: ${companyLabel}
+[지원 직무·직렬]: ${state.role}
+[질문 카테고리]: ${q.cat}
+[면접 질문]: ${q.text}
+[지원자 답변]: ${answer}
+
+반드시 위 기관(${companyLabel})과 직무(${state.role})에 특화된 피드백을 주세요.
+포부·지원동기 관련이라면 해당 기관의 실제 사업, 정책, 시장 맥락을 반영하세요.
+공무원 시험이라면 공직 가치관(청렴·책임·봉사), 해당 직렬 특성을 반영하세요.
+
+【절대 규칙 - 반드시 지킬 것】
+1. "안녕하세요", "반갑습니다", "잘 부탁드립니다" 같은 단순 인사만 있으면 → 반드시 grade: "F", score: 0
+2. 질문과 전혀 무관한 내용 → 반드시 grade: "F", score: 0
+3. relevance(질문관련성)가 30 미만이면 → grade는 반드시 "F" 또는 "D"
+4. 자기소개인데 이름·경력·지원동기 없이 한 문장뿐 → grade: "D", score: 3 이하
+5. 내용은 있지만 구체적 경험·수치 없음 → grade: "C"
+6. 구체적 경험+직무연관성 있음 → grade: "B"
+7. 기관·직무 맥락까지 완벽 반영 → grade: "A"
+이 규칙을 어기면 안 됩니다. relevance가 낮으면 grade도 반드시 낮아야 합니다.
+
+아래 JSON 형식으로만 응답해주세요. 다른 텍스트 없이 JSON만 출력:
+
+{
+  "score": 숫자(0-10),
+  "grade": "A/B/C/D/F 중 하나",
+  "logic": 숫자(0-100, 논리성),
+  "specific": 숫자(0-100, 구체성),
+  "structure": 숫자(0-100, 답변구조),
+  "delivery": 숫자(0-100, 전달력),
+  "relevance": 숫자(0-100, 질문관련성),
+  "good": "잘한 점 2-3문장",
+  "improve": "개선할 점 2-3문장",
+  "suggest": "더 나은 답변을 위한 구체적 제안 2-3문장"
+}`;
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const text = data.content[0].text.trim();
+    const clean = text.replace(/```json|```/g, '').trim();
+    const fb = JSON.parse(clean);
+
+    loading.style.display = 'none';
+    showFeedback(fb, answer);
+
+    // Save state
+    const gradeMap = {A:10, B:8, C:6, D:4, F:0};
+    const pts = gradeMap[fb.grade] ?? 4;
+    state.scores.push(pts);
+    state.feedbacks.push({ q: q.text, cat: q.cat, fb, pts, answer });
+    state.totalScore = state.scores.reduce((a,b) => a+b, 0);
+    document.getElementById('running-score').textContent = state.totalScore;
+
+  } catch(e) {
+    loading.style.display = 'none';
+    // API 연결 실패 시 샘플 피드백으로 자동 대체
+    const fb = getMockFeedback();
+    showFeedback(fb, answer);
+    const gradeMap = {A:10, B:8, C:6, D:4, F:0};
+const pts = gradeMap[fb.grade] ?? 4;
+    state.scores.push(pts);
+    state.feedbacks.push({ q: q.text, cat: q.cat, fb, pts, answer });
+    state.totalScore = state.scores.reduce((a,b) => a+b, 0);
+    document.getElementById('running-score').textContent = state.totalScore;
+  }
+}
+
+function showFeedback(fb, answer) {
+  const card = document.getElementById('feedback-card');
+  card.style.display = 'block';
+
+  // 내 답변 표시
+  const existingAnswer = card.querySelector('.my-answer-box');
+  if (existingAnswer) existingAnswer.remove();
+  const answerBox = document.createElement('div');
+  answerBox.className = 'my-answer-box';
+  answerBox.innerHTML = `
+    <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+                color:var(--text2);font-family:'Space Mono',monospace;margin-bottom:8px;">
+      ✏️ 내 답변
+    </div>
+    <div style="font-size:14px;line-height:1.8;color:var(--text);
+                background:var(--surface2);border:1px solid var(--border);
+                border-radius:12px;padding:16px;white-space:pre-wrap;">${answer}</div>
+  `;
+  card.insertBefore(answerBox, card.firstChild);
+
+  // Grade badge
+  const badge = document.getElementById('grade-badge');
+  badge.textContent = fb.grade;
+  badge.className = 'score-badge score-' + fb.grade;
+
+  // Score bars (animate)
+  setTimeout(() => {
+    setBar('logic', fb.logic);
+    setBar('specific', fb.specific);
+    setBar('structure', fb.structure);
+    setBar('delivery', fb.delivery);
+    setBar('relevance', fb.relevance || 0);
+  }, 100);
+
+  // Sections
+  const sections = document.getElementById('feedback-sections');
+  sections.innerHTML = `
+    <div class="fb-section fb-good">
+      <div class="fb-section-title"><span class="fb-icon">✅</span> 잘한 점</div>
+      <div>${fb.good}</div>
+    </div>
+    <div class="fb-section fb-improve">
+      <div class="fb-section-title"><span class="fb-icon">⚠️</span> 개선할 점</div>
+      <div>${fb.improve}</div>
+    </div>
+    <div class="fb-section fb-suggest">
+      <div class="fb-section-title"><span class="fb-icon">💡</span> 코치의 제안</div>
+      <div>${fb.suggest}</div>
+    </div>
+  `;
+
+  // Next button
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'block';
+
+  if (state.currentQ === 9) {
+    nextBtn.textContent = '결과 확인하기 🎯';
+  } else {
+    nextBtn.textContent = `다음 질문으로 → (${state.currentQ + 2}/10)`;
+  }
+
+  const tip = document.getElementById('helper-tip');
+  tip.textContent = `점수: ${Math.round(fb.score * 10)}점 획득`;
+
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setBar(id, val) {
+  document.getElementById('bar-' + id).textContent = val + '%';
+  document.getElementById('fill-' + id).style.width = val + '%';
+}
+
+function nextQuestion() {
+  if (state.currentQ === 9) {
+    showResult();
+    return;
+  }
+  state.currentQ++;
+  loadQuestion(state.currentQ);
+  document.getElementById('interview').scrollTo({ top: 0 });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════
+//  RESULT
+// ══════════════════════════════════
+function showResult() {
+  const total = state.totalScore;
+  const max = 100;
+  const pct = total;
+
+  let emoji = '🎉', grade = '', sub = '';
+  if (pct >= 80) { emoji = '🏆'; grade = '합격권 수준입니다! 자신감을 가지세요.'; }
+  else if (pct >= 60) { emoji = '👍'; grade = '양호한 수준입니다. 조금만 더 다듬으면 됩니다!'; }
+  else if (pct >= 40) { emoji = '📚'; grade = '기본기가 있습니다. 더 많은 연습이 필요해요.'; }
+  else { emoji = '💪'; grade = '아직 준비 단계입니다. 꾸준히 연습해보세요!'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('final-score').textContent = total;
+  document.getElementById('final-grade').textContent = grade;
+  document.getElementById('result-sub').textContent = `${state.company} · ${state.role} · 총 10문항 완료`;
+
+  const list = document.getElementById('results-list');
+  list.innerHTML = state.feedbacks.map((item, i) => {
+    const scoreColor = item.pts >= 80 ? 'strong-tag' : item.pts >= 60 ? '' : 'weak-tag';
+    return `
+      <div class="result-item">
+        <div class="result-num">Q${i+1}</div>
+        <div class="result-content">
+          <div class="result-q">${item.q}</div>
+          <div class="result-score-mini ${scoreColor}">${item.pts}점 · ${item.fb.grade} · ${item.cat}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  showSection('result');
+  window.scrollTo({ top: 0 });
+}
+</script>
+</body>
+</html>
