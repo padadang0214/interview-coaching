@@ -1895,7 +1895,9 @@ function showFeedback(fb, answer) {
   }
 
   const tip = document.getElementById('helper-tip');
-  tip.textContent = `점수: ${Math.round(fb.score * 10)}점 획득`;
+  const gradeMap2 = {A:10, B:8, C:6, D:4, F:0};
+  const ptsDisplay = gradeMap2[fb.grade] ?? 4;
+  tip.textContent = `점수: ${ptsDisplay}점 획득 (${fb.grade}등급)`;
 
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -1937,7 +1939,7 @@ function showResult() {
 
   const list = document.getElementById('results-list');
   list.innerHTML = state.feedbacks.map((item, i) => {
-    const scoreColor = item.pts >= 80 ? 'strong-tag' : item.pts >= 60 ? '' : 'weak-tag';
+    const scoreColor = item.pts >= 8 ? 'strong-tag' : item.pts >= 6 ? '' : 'weak-tag';
     return `
       <div class="result-item">
         <div class="result-num">Q${i+1}</div>
