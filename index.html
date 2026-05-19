@@ -1793,10 +1793,17 @@ async function submitAnswer() {
     const clean = text.replace(/```json|```/g, '').trim();
     const fb = JSON.parse(clean);
 
+    // AI 등급 무시하고 relevance 기반으로 강제 덮어쓰기
+    const rel = fb.relevance || 0;
+    if      (rel < 10)  fb.grade = 'F';
+    else if (rel < 30)  fb.grade = 'D';
+    else if (rel < 50)  fb.grade = 'C';
+    else if (rel < 75)  fb.grade = 'B';
+    else                fb.grade = 'A';
+
     loading.style.display = 'none';
     showFeedback(fb, answer);
 
-    // Save state
     const gradeMap = {A:10, B:8, C:6, D:4, F:0};
     const pts = gradeMap[fb.grade] ?? 4;
     state.scores.push(pts);
@@ -1810,7 +1817,7 @@ async function submitAnswer() {
     const fb = getMockFeedback();
     showFeedback(fb, answer);
     const gradeMap = {A:10, B:8, C:6, D:4, F:0};
-const pts = gradeMap[fb.grade] ?? 4;
+    const pts = gradeMap[fb.grade] ?? 4;
     state.scores.push(pts);
     state.feedbacks.push({ q: q.text, cat: q.cat, fb, pts, answer });
     state.totalScore = state.scores.reduce((a,b) => a+b, 0);
@@ -1880,7 +1887,8 @@ function showFeedback(fb, answer) {
   }
 
   const tip = document.getElementById('helper-tip');
-  tip.textContent = `점수: ${Math.round(fb.score * 10)}점 획득`;
+  const gradeMap3 = {A:10, B:8, C:6, D:4, F:0};
+  tip.textContent = `점수: ${gradeMap3[fb.grade] ?? 4}점 획득 (${fb.grade}등급)`;
 
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -1922,7 +1930,7 @@ function showResult() {
 
   const list = document.getElementById('results-list');
   list.innerHTML = state.feedbacks.map((item, i) => {
-    const scoreColor = item.pts >= 80 ? 'strong-tag' : item.pts >= 60 ? '' : 'weak-tag';
+    const scoreColor = item.pts >= 8 ? 'strong-tag' : item.pts >= 6 ? '' : 'weak-tag';
     return `
       <div class="result-item">
         <div class="result-num">Q${i+1}</div>
